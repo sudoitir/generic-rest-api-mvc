@@ -6,7 +6,7 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
     steps:
-      - checkout:
+      - checkout
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar -Dsonar.projectKey=sudoitir_generic-rest-api-mvc
