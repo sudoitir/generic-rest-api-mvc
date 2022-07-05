@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PersonServiceImpl extends AbstractCrudService<PersonEntity,Long, PersonRequest, PersonResponse> {
-    public PersonServiceImpl(final PersonJpaRepository repo, final PersonMapper mapper) {
+    public PersonServiceImpl(final PersonJpaRepository repo,  final PersonMapper mapper) {
         super(repo, mapper);
     }
 }
