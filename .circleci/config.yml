@@ -5,9 +5,6 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build:
-    docker:
-      - image: 'circleci/openjdk:17-jdk'
     steps:
       - checkout
       - run:
@@ -34,15 +31,16 @@ jobs:
       - run:
           name: Test
           command: mvn test
+      - run:
+          name: Analyze on SonarCloud
+          command: mvn verify sonar:sonar -Dsonar.projectKey=sudoitir_generic-rest-api-mvc
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  main:
-    jobs:
-      - build:
-          context: SonarCloud
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  Circle-Ci: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build-and-test
+      - build:
+          context: SonarCloud
