@@ -1,6 +1,6 @@
 package ir.sudoit.core.person;
 
-import ir.sudoit.core.base.BaseModel;
+import ir.sudoit.core.crud.BaseModel;
 import lombok.*;
 
 import java.io.Serial;
