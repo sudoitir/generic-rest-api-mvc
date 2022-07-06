@@ -1,4 +1,4 @@
-#Spring Boot Generic Rest Api
+# Spring Boot Generic Rest Api
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/sudoitir/generic-rest-api-mvc/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/sudoitir/generic-rest-api-mvc/tree/develop)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sudoitir_generic-rest-api-mvc&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sudoitir_generic-rest-api-mvc)
