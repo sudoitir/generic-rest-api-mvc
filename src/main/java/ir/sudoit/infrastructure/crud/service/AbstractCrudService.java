@@ -2,32 +2,35 @@ package ir.sudoit.infrastructure.crud.service;
 
 import ir.sudoit.infrastructure.crud.persistence.dto.CrudRequest;
 import ir.sudoit.infrastructure.crud.persistence.dto.CrudResponse;
-import ir.sudoit.infrastructure.crud.persistence.model.IdentifiableEntity;
-import ir.sudoit.infrastructure.crud.persistence.model.EntityEvent;
 import ir.sudoit.infrastructure.crud.persistence.mapper.CrudMapper;
+import ir.sudoit.infrastructure.crud.persistence.model.EntityEvent;
+import ir.sudoit.infrastructure.crud.persistence.model.IdentifiableEntity;
 import ir.sudoit.infrastructure.crud.persistence.repositories.CrudRepo;
+import ir.sudoit.infrastructure.crud.utility.PropertiesConfig;
+import ir.sudoit.infrastructure.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static ir.sudoit.infrastructure.crud.utility.CrudUtils.copyNonNullProperties;
 
 @Transactional
-public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse<ID>> implements CrudService<T, ID, Q, S> {
+public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse> implements CrudService<T, ID, Q, S> {
 
     protected final CrudRepo<T, ID> repo;
     protected final CrudMapper<T, ID, Q, S> mapper;
 
+    private static final String NOT_FOUND_CODE = "not_found_error_code";
+    private static final String NOT_FOUND_MESSAGE = "not_found_error_message";
+
+
+    @Autowired
+    protected PropertiesConfig propertiesConfig;
     @Autowired
     protected ApplicationEventPublisher publisher;
 
@@ -62,22 +65,24 @@ public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID e
 
     @NonNull
     @Override
-    public Optional<T> update(final ID id, final T source) {
+    public T update(final ID id, final T source) {
         return repo.update(id, source, (s, t) -> copyNonNullProperties(s, t, ignoredProps())).map(entity -> {
             EntityEvent<T, ID> event = onUpdateEvent(entity);
             if (event != null) publisher.publishEvent(event);
             return entity;
-        });
+        }).orElseThrow(() -> new NotFoundException(propertiesConfig.getResult(NOT_FOUND_CODE),
+                propertiesConfig.getResult(NOT_FOUND_MESSAGE)));
     }
 
     @NonNull
     @Override
-    public Optional<S> update(final ID id, final Q source) {
+    public S update(final ID id, final Q source) {
         return repo.update(id, source, new CallbackMapper<>(mapper::toUpdate, this::onUpdate)).map(entity -> {
             EntityEvent<T, ID> event = onUpdateEvent(entity);
             if (event != null) publisher.publishEvent(event);
             return mapper.toResponse(entity);
-        });
+        }).orElseThrow(() -> new NotFoundException(propertiesConfig.getResult(NOT_FOUND_CODE),
+                propertiesConfig.getResult(NOT_FOUND_MESSAGE)));
     }
 
     @Override
@@ -93,14 +98,16 @@ public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID e
     @NonNull
     @Override
     public Optional<T> getOneT(@NonNull final ID id) {
-        return Optional.of(repo.getById(id));
+            return Optional.of(repo.getById(id));
     }
 
     @Transactional(readOnly = true)
     @NonNull
     @Override
-    public Optional<S> getOne(@NonNull final ID id) {
-        return getOneT(id).map(mapper::toResponse);
+    public S getOne(@NonNull final ID id) {
+        return getOneT(id).map(mapper::toResponse)
+                .orElseThrow(() -> new NotFoundException(propertiesConfig.getResult(NOT_FOUND_CODE),
+                        propertiesConfig.getResult(NOT_FOUND_MESSAGE)));
     }
 
     @Transactional(readOnly = true)
@@ -114,39 +121,9 @@ public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID e
     @NonNull
     @Override
     public List<S> getAll() {
-        return repo.getAll().stream().map(mapper::toResponse).collect(Collectors.toList());
+        return repo.getAll().stream().map(mapper::toResponse).toList();
     }
 
-    @Transactional(readOnly = true)
-    @NonNull
-    @Override
-    public Page<T> getAllT(final Pageable pageable) {
-        return repo.getAll(pageable);
-    }
-
-    @Transactional(readOnly = true)
-    @NonNull
-    @Override
-    public Page<S> getAll(final Pageable pageable) {
-//		return repo.getAll(pageable).map(mapper::toResponse); // works in SB 2.0+
-        Page<T> page = repo.getAll(pageable);
-        List<S> content = page.getContent().stream().map(mapper::toResponse).collect(Collectors.toList());
-        return new PageImpl<>(content, pageable, page.getTotalElements());
-    }
-
-    @Transactional(readOnly = true)
-    @NonNull
-    @Override
-    public List<T> getAllT(final Sort sort) {
-        return repo.getAll(sort);
-    }
-
-    @Transactional(readOnly = true)
-    @NonNull
-    @Override
-    public List<S> getAll(final Sort sort) {
-        return repo.getAll(sort).stream().map(mapper::toResponse).collect(Collectors.toList());
-    }
 
     protected String[] ignoredProps() {
         return new String[]{"id", "version", "createdAt", "updatedAt"};
@@ -161,6 +138,7 @@ public abstract class AbstractCrudService<T extends IdentifiableEntity<ID>, ID e
     }
 
     protected EntityEvent<T, ID> onCreateEvent(@NonNull T entity) {
+        //TODO: You can create event
         return null;
     }
 

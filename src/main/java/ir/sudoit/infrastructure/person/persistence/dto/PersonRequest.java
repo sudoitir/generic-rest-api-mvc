@@ -1,13 +1,18 @@
 package ir.sudoit.infrastructure.person.persistence.dto;
 
-import ir.sudoit.infrastructure.crud.controller.OnCreate;
 import ir.sudoit.infrastructure.crud.persistence.dto.CrudRequest;
-import lombok.Data;
+import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+public class PersonRequest  implements CrudRequest {
 
-@Data
-public class PersonRequest implements CrudRequest {
-    @NotBlank(groups = OnCreate.class)
     private String name;
+
+    private String mobile;
+
 }
