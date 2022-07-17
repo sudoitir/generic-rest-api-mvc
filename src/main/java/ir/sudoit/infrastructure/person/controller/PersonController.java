@@ -1,59 +1,56 @@
 package ir.sudoit.infrastructure.person.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import ir.sudoit.infrastructure.crud.controller.AbstractCrudController;
-import ir.sudoit.infrastructure.crud.controller.OnCreate;
-import ir.sudoit.infrastructure.crud.controller.OnUpdate;
 import ir.sudoit.infrastructure.crud.service.CrudService;
+import ir.sudoit.infrastructure.crud.utility.PropertiesConfig;
 import ir.sudoit.infrastructure.person.persistence.dto.PersonRequest;
 import ir.sudoit.infrastructure.person.persistence.dto.PersonResponse;
-import ir.sudoit.infrastructure.person.persistence.dto.Views;
 import ir.sudoit.infrastructure.person.persistence.entity.PersonEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @apiNote  The controller can have any method of CRUD you want by overriding it
+ * @see ir.sudoit.infrastructure.crud.controller.AbstractCrudController
+ */
 @RestController
 @RequestMapping("people")
 public class PersonController extends AbstractCrudController<PersonEntity, Long, PersonRequest, PersonResponse> {
-    protected PersonController(CrudService<PersonEntity, Long, PersonRequest, PersonResponse> service) {
-        super(service);
+
+    private final PropertiesConfig propertiesConfig;
+
+    protected PersonController(CrudService<PersonEntity, Long, PersonRequest, PersonResponse> service, PropertiesConfig propertiesConfig) {
+        super(service, propertiesConfig);
+        this.propertiesConfig = propertiesConfig;
     }
 
-    @JsonView(Views.ForPerson.class)
+
     @PostMapping
     @Override
-    public ResponseEntity<PersonResponse> create(@Validated(OnCreate.class) @RequestBody @NonNull final PersonRequest request) {
+    @NonNull
+    public ResponseEntity<?> create(@RequestBody @NonNull final PersonRequest request) {
         return super.create(request);
     }
 
-    @JsonView(Views.ForPerson.class)
-    @PatchMapping("/{id}")
+    @PatchMapping("{id}")
     @Override
-    public ResponseEntity<PersonResponse> update(@PathVariable("id") @NonNull final Long id, @Validated(OnUpdate.class) @RequestBody @NonNull final PersonRequest request) {
-        return super.update(id, request);
+    @NonNull
+    public ResponseEntity<?> update(@RequestBody @NonNull final PersonRequest request, @PathVariable("id") @NonNull final Long id) {
+        return super.update(request, id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     @Override
+    @NonNull
     public ResponseEntity<?> delete(@PathVariable("id") @NonNull final Long id) {
         return super.delete(id);
     }
 
-    @JsonView(Views.ForPerson.class)
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     @Override
-    public ResponseEntity<PersonResponse> getOne(@PathVariable("id") @NonNull final Long id) {
+    @NonNull
+    public ResponseEntity<?> getOne(@PathVariable("id") @NonNull final Long id) {
         return super.getOne(id);
-    }
-
-    @JsonView(Views.ForPerson.class)
-    @GetMapping
-    @Override
-    public ResponseEntity<Page<PersonResponse>> getAll(Pageable pageable) {
-        return super.getAll(pageable);
     }
 }

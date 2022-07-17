@@ -4,9 +4,8 @@ import ir.sudoit.infrastructure.crud.persistence.dto.CrudRequest;
 import ir.sudoit.infrastructure.crud.persistence.dto.CrudResponse;
 import ir.sudoit.infrastructure.crud.persistence.model.IdentifiableEntity;
 import ir.sudoit.infrastructure.crud.service.CrudService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import ir.sudoit.infrastructure.crud.utility.ApplicationUtilities;
+import ir.sudoit.infrastructure.crud.utility.PropertiesConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -14,61 +13,68 @@ import org.springframework.lang.NonNull;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class AbstractCrudController<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse<ID>> {
+public abstract class AbstractCrudController<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse> {
 
     protected final CrudService<T, ID, Q, S> service;
 
-    protected AbstractCrudController(@NonNull final CrudService<T, ID, Q, S> service) {
+    protected final PropertiesConfig propertiesConfig;
+
+    protected AbstractCrudController(@NonNull final CrudService<T, ID, Q, S> service, PropertiesConfig propertiesConfig) {
         this.service = service;
+        this.propertiesConfig = propertiesConfig;
     }
 
 
     @NonNull
-    public ResponseEntity<S> create(@NonNull final Q request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+    public ResponseEntity<?> create(@NonNull final Q request) {
+        S create = service.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApplicationUtilities.toActionResultWithObject(create, propertiesConfig));
+    }
+
+    @NonNull
+    public ResponseEntity<?> create(@NonNull final T model) {
+        T create = service.create(model);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApplicationUtilities.toActionResultWithObject(create, propertiesConfig));
     }
 
 
     @NonNull
-    public ResponseEntity<S> update(@NonNull final ID id, @NonNull final Q request) {
-        return service.update(id, request)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> update(@NonNull final Q request, @NonNull final ID id) {
+        S update = service.update(id, request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApplicationUtilities.toActionResultWithObject(update, propertiesConfig));
+    }
+
+    @NonNull
+    public ResponseEntity<?> update(@NonNull final T model, @NonNull final ID id) {
+        T update = service.update(id, model);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApplicationUtilities.toActionResultWithObject(update, propertiesConfig));
     }
 
 
     @NonNull
     public ResponseEntity<?> delete(@NonNull final ID id) {
         if (service.delete(id)) {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
 
     @NonNull
-    public ResponseEntity<S> getOne(@NonNull final ID id) {
-        return service.getOne(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getOne(@NonNull final ID id) {
+        S one = service.getOne(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ApplicationUtilities.toActionResultWithObject(one, propertiesConfig));
     }
 
 
     @NonNull
-    public ResponseEntity<Page<S>> getAll(@NonNull final Pageable pageable) {
-        return ResponseEntity.ok(service.getAll(pageable));
-    }
-
-
-    @NonNull
-    public ResponseEntity<List<S>> getAll(@NonNull final Sort sort) {
-        return ResponseEntity.ok(service.getAll(sort));
-    }
-
-
-    @NonNull
-    public ResponseEntity<List<S>> getAll() {
+    public ResponseEntity<List<?>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 }
