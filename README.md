@@ -1,5 +1,7 @@
 # Spring Boot Generic Rest Api
 
+<img align="right" src="https://sonarcloud.io/images/project_badges/sonarcloud-black.svg">
+
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/sudoitir/generic-rest-api-mvc/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/sudoitir/generic-rest-api-mvc/tree/develop)
 [![Java CI with Maven](https://github.com/sudoitir/generic-rest-api-mvc/actions/workflows/maven.yml/badge.svg)](https://github.com/sudoitir/generic-rest-api-mvc/actions/workflows/maven.yml)
 [![pmd](https://github.com/sudoitir/generic-rest-api-mvc/actions/workflows/pmd.yml/badge.svg)](https://github.com/sudoitir/generic-rest-api-mvc/actions/workflows/pmd.yml)
