@@ -8,13 +8,14 @@ import javax.persistence.Table;
 import java.io.Serial;
 
 @Entity
-@Table(name = "person")
+@Table (name = "person")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PersonEntity extends LongIdEntity {
+public class PersonEntity extends LongIdEntity
+{
 
     @Serial
     private static final long serialVersionUID = 3157238690846631805L;

@@ -7,7 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class AccessException extends RuntimeException {
+public class AccessException extends RuntimeException
+{
 
     private final String code;
 

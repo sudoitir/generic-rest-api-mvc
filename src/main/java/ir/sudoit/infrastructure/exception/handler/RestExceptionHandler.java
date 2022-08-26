@@ -19,33 +19,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler extends ResponseEntityExceptionHandler
+{
 
 
-    @ExceptionHandler(value
+    @ExceptionHandler (value
             = {NotFoundException.class})
     protected ResponseEntity<Object> handleApplicationException(
-            NotFoundException ex, WebRequest request) {
+            NotFoundException ex, WebRequest request)
+    {
         MetaModel bodyOfResponse = new MetaModel(HttpStatus.NOT_FOUND.value(),
                 ex.getCode(), ex.getMessage());
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
-    @ExceptionHandler(value
+    @ExceptionHandler (value
             = {AccessException.class})
     protected ResponseEntity<Object> handleUserAccessException(
-            AccessException ex, WebRequest request) {
+            AccessException ex, WebRequest request)
+    {
         MetaModel bodyOfResponse = new MetaModel(HttpStatus.FORBIDDEN.value(),
                 ex.getCode(), ex.getMessage());
         return handleExceptionInternal(ex, bodyOfResponse,
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-    @ExceptionHandler(value
+    @ExceptionHandler (value
             = {InputException.class})
     protected ResponseEntity<Object> handleIllegalArgumentException(
-            InputException ex, WebRequest request) {
+            InputException ex, WebRequest request)
+    {
         MetaModel bodyOfResponse = new MetaModel(HttpStatus.BAD_REQUEST.value(),
                 "8020", ex.getMessage());
         return handleExceptionInternal(ex, bodyOfResponse,
@@ -57,9 +61,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected @NonNull ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                            @NonNull HttpHeaders headers,
                                                                            @NonNull HttpStatus status,
-                                                                           @NonNull WebRequest request) {
+                                                                           @NonNull WebRequest request)
+    {
         List<String> details = new ArrayList<>();
-        for (ObjectError error : ex.getBindingResult().getAllErrors()) {
+        for (ObjectError error : ex.getBindingResult().getAllErrors())
+        {
             details.add(error.getDefaultMessage());
         }
         MetaModel bodyOfResponse = new MetaModel(HttpStatus.BAD_REQUEST.value(),

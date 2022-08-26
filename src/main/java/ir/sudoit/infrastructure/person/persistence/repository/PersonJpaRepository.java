@@ -5,5 +5,6 @@ import ir.sudoit.infrastructure.person.persistence.entity.PersonEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonJpaRepository extends BaseRepo<PersonEntity, Long> {
+public interface PersonJpaRepository extends BaseRepo<PersonEntity, Long>
+{
 }

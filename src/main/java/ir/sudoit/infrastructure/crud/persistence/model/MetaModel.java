@@ -10,13 +10,15 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class MetaModel implements CrudResponse {
+public class MetaModel implements CrudResponse
+{
 
     private Integer statusCode;
     private String code;
     private String message;
 
-    public static MetaModel getInstance(PropertiesConfig propertiesConfig) {
+    public static MetaModel getInstance(PropertiesConfig propertiesConfig)
+    {
         return new MetaModel(200,
                 propertiesConfig.getResult("success-code"),
                 propertiesConfig.getResult("success-text"));

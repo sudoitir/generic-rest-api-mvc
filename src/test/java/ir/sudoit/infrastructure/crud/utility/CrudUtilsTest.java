@@ -8,10 +8,12 @@ import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CrudUtilsTest {
+class CrudUtilsTest
+{
 
     @Test
-    void copyNonNullProperties() {
+    void copyNonNullProperties()
+    {
         String[] ignoreProperties = new String[]{"id", "version", "createdAt", "updatedAt"};
 
         Model source = Model.builder()
@@ -55,7 +57,8 @@ class CrudUtilsTest {
     }
 
     @Test
-    void firstWordOf() {
+    void firstWordOf()
+    {
         assertThat(CrudUtils.firstWordOf("SplitCamelCase"))
                 .isEqualTo("split");
 
@@ -67,7 +70,8 @@ class CrudUtilsTest {
     }
 
     @Test
-    void toSnakeCase() {
+    void toSnakeCase()
+    {
         assertThat(CrudUtils.toSnakeCase("SplitCamelCase"))
                 .isEqualTo("split_camel_case");
 
@@ -79,7 +83,8 @@ class CrudUtilsTest {
     }
 
     @Test
-    void splitCamelCase() {
+    void splitCamelCase()
+    {
         assertThat(CrudUtils.splitCamelCase("SplitCamelCase"))
                 .containsExactly("Split", "Camel", "Case");
 
@@ -95,7 +100,8 @@ class CrudUtilsTest {
 
     @Data
     @Builder
-    private static class Model {
+    private static class Model
+    {
         private Integer id;
         private Integer version;
         private Instant createdAt;
@@ -105,7 +111,8 @@ class CrudUtilsTest {
 
     @Data
     @Builder
-    private static class Model2 {
+    private static class Model2
+    {
         private Integer id;
         private Integer version;
         private String text;

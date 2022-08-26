@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface CrudService<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse> {
+public interface CrudService<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse>
+{
 
     S create(Q source);
 

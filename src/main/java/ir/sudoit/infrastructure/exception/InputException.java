@@ -7,7 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class InputException extends RuntimeException {
+public class InputException extends RuntimeException
+{
 
     private final String code;
 

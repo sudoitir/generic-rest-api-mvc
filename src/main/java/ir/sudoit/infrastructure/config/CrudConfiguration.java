@@ -5,11 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CrudConfiguration {
+public class CrudConfiguration
+{
 
 
     @Bean
-    public PropertiesConfig propertiesConfig(){
+    public PropertiesConfig propertiesConfig()
+    {
         return new PropertiesConfig();
     }
 }

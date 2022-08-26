@@ -8,5 +8,6 @@ import java.io.Serializable;
 
 @ToString
 @EqualsAndHashCode
-public abstract class BaseEntity<ID extends Serializable> implements IdentifiableEntity<ID> {
+public abstract class BaseEntity<ID extends Serializable> implements IdentifiableEntity<ID>
+{
 }

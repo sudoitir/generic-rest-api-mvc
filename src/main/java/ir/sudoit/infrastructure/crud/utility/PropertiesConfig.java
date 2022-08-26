@@ -7,17 +7,22 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class PropertiesConfig {
-    public String getResult(String codeOrMessage) {
+public class PropertiesConfig
+{
+    public String getResult(String codeOrMessage)
+    {
 
-        try (InputStream inputStream = InputException.class.getClassLoader().getResourceAsStream("keyvalue.properties")) {
+        try (InputStream inputStream = InputException.class.getClassLoader().getResourceAsStream("keyvalue.properties"))
+        {
             Properties prop = new Properties();
-            if (inputStream == null) {
+            if (inputStream == null)
+            {
                 Logger.getLogger("Sorry, unable to find " + "keyvalue.properties");
             }
             prop.load(inputStream);
             return prop.getProperty(codeOrMessage);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
         return null;

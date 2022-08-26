@@ -9,7 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class PersonRequest  implements CrudRequest {
+public class PersonRequest implements CrudRequest
+{
 
     private String name;
 

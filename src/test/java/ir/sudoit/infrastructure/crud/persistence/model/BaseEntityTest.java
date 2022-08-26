@@ -11,47 +11,54 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BaseEntityTest {
+class BaseEntityTest
+{
     private Model x;
     private Model y;
     private Model z;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp()
+    {
         x = new Model(1);
         y = new Model(1);
         z = new Model(1);
     }
 
 
-
     @Test
-    void reflexive() {
+    void reflexive()
+    {
         assertThat(x).isEqualTo(x);
     }
 
     @Test
-    void symmetric() {
+    void symmetric()
+    {
         assertThat(x).isEqualTo(y);
         assertThat(y).isEqualTo(x);
     }
 
     @Test
-    void transitive() {
+    void transitive()
+    {
         assertThat(x).isEqualTo(y);
         assertThat(y).isEqualTo(z);
         assertThat(z).isEqualTo(x);
     }
 
     @Test
-    void consistence() {
-        for (int i = 0; i < 1000; i++) {
+    void consistence()
+    {
+        for (int i = 0; i < 1000; i++)
+        {
             assertThat(x).isEqualTo(y);
         }
     }
 
     @Test
-    void nullComparison() {
+    void nullComparison()
+    {
         assertThat(new Model(null)).isNotNull();
         assertThat(new Model(0)).isNotNull();
         assertThat(new Model(Integer.MIN_VALUE)).isNotNull();
@@ -59,7 +66,8 @@ class BaseEntityTest {
     }
 
     @Test
-    void hashCodeContract() {
+    void hashCodeContract()
+    {
         assertThat(x.equals(y)).isTrue();
         assertThat(x.hashCode()).isEqualTo(y.hashCode());
 
@@ -68,11 +76,12 @@ class BaseEntityTest {
     }
 
     @Test
-    void comparisonWithProxy() {
+    void comparisonWithProxy()
+    {
         Model model = new Model(1);
         Model proxy = (Model) Enhancer.create(
                 Model.class,
-                (MethodInterceptor) (object, method, args, methodProxy) -> methodProxy.invoke(model, args)
+                (MethodInterceptor) (object, method, args, methodProxy)->methodProxy.invoke(model, args)
         );
         assertThat(model).isEqualTo(proxy);
     }
@@ -81,7 +90,8 @@ class BaseEntityTest {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    static class Model extends BaseEntity<Integer> {
+    static class Model extends BaseEntity<Integer>
+    {
         private Integer id;
     }
 }

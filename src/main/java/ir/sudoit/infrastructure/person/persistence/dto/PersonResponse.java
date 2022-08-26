@@ -10,7 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class PersonResponse implements CrudResponse{
+public class PersonResponse implements CrudResponse
+{
 
     private Long id;
 

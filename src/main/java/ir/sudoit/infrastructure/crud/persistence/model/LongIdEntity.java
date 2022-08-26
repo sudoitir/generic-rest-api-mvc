@@ -15,14 +15,15 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public abstract class LongIdEntity extends BaseEntity<Long>{
+@EntityListeners (AuditingEntityListener.class)
+public abstract class LongIdEntity extends BaseEntity<Long>
+{
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(updatable = false)
+    @Column (updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
     @Column
@@ -34,22 +35,31 @@ public abstract class LongIdEntity extends BaseEntity<Long>{
     private Long version;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        if (!super.equals(o))
+            return false;
 
         LongIdEntity that = (LongIdEntity) o;
 
-        if (!id.equals(that.id)) return false;
-        if (!Objects.equals(createdDate, that.createdDate)) return false;
-        if (!Objects.equals(updatedDate, that.updatedDate)) return false;
-        if (!Objects.equals(isDeleted, that.isDeleted)) return false;
+        if (!id.equals(that.id))
+            return false;
+        if (!Objects.equals(createdDate, that.createdDate))
+            return false;
+        if (!Objects.equals(updatedDate, that.updatedDate))
+            return false;
+        if (!Objects.equals(isDeleted, that.isDeleted))
+            return false;
         return Objects.equals(version, that.version);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = super.hashCode();
         result = 31 * result + id.hashCode();
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);

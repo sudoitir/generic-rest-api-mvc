@@ -8,18 +8,21 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-public class ActionResult<T> {
+public class ActionResult<T>
+{
 
     private MetaModel meta;
     private T data;
 
-    public ActionResult(MetaModel meta, T data) {
+    public ActionResult(MetaModel meta, T data)
+    {
         this.meta = meta;
         this.data = data;
     }
 
 
-    public ActionResult(MetaModel meta) {
+    public ActionResult(MetaModel meta)
+    {
         this.meta = meta;
     }
 }

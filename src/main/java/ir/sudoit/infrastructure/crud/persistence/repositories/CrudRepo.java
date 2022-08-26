@@ -11,17 +11,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public interface CrudRepo<T extends IdentifiableEntity<ID>, ID extends Serializable> {
+public interface CrudRepo<T extends IdentifiableEntity<ID>, ID extends Serializable>
+{
 
-    @NonNull T create(@NonNull T entity);
+    @NonNull
+    T create(@NonNull T entity);
 
-    @NonNull <S> Optional<T> update(@NonNull ID id, @NonNull S source, @NonNull BiFunction<S, T, T> mapper);
+    @NonNull
+    <S> Optional<T> update(@NonNull ID id, @NonNull S source, @NonNull BiFunction<S, T, T> mapper);
 
 
-    @NonNull Optional<T> del(@NonNull ID id);
+    @NonNull
+    Optional<T> del(@NonNull ID id);
 
 
-    @NonNull T getById(@NonNull ID id);
+    @NonNull
+    T getById(@NonNull ID id);
 
 
     @NonNull
@@ -32,5 +37,6 @@ public interface CrudRepo<T extends IdentifiableEntity<ID>, ID extends Serializa
     Page<T> getAll(@NonNull Pageable pageable);
 
 
-    @NonNull List<T> getAll(@NonNull Sort sort);
+    @NonNull
+    List<T> getAll(@NonNull Sort sort);
 }

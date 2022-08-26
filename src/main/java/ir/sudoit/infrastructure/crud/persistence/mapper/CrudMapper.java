@@ -14,14 +14,15 @@ import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 
-@MapperConfig(
+@MapperConfig (
         nullValueMappingStrategy = RETURN_DEFAULT,
         nullValueCheckStrategy = ALWAYS,
         nullValuePropertyMappingStrategy = IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = "spring"
 )
-public interface CrudMapper<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse> {
+public interface CrudMapper<T extends IdentifiableEntity<ID>, ID extends Serializable, Q extends CrudRequest, S extends CrudResponse>
+{
 
     /**
      * Maps an input (request) DTO to the related entity to be created.
